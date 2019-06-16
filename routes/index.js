@@ -102,18 +102,16 @@ router.post('/admin/nav/navAdd', (req, res, next) => {
     });
 });
 
+// 获取所属栏目数据
 router.get('/admin/nav/navSelect', (req, res, next) => {
     connection.query('select * from nav', (error, results, fields) => {
         if (error) throw error;
-        //将数据通过 pid 分层级 并生成 option标签 带id表示查询对应id 的数据
-        res.send(nav.get_hierarchy_select(results));
-    });
-});
-
-router.get('/admin/nav/navList', (req, res, next) => {
-    connection.query('select * from nav', (error, results, fields) => {
-        if (error) throw error;
-        res.send(nav.get_hierarchy_json(results)); // 以json 格式发送
+        if (req.query.type == 'option') {
+            res.send(nav.get_hierarchy_select(results)); // 以option标签格式发送
+        }
+        if (req.query.type == 'json') {
+            res.send(nav.get_hierarchy_json(results)); // 以json数据格式发送
+        }
     });
 });
 
@@ -150,22 +148,6 @@ router.get('/admin/nav/navDel', (req, res, next) => {
     });
 });
 
-// // 删除导航
-// router.get('/admin/nav/navDel', (req, res, next) => {
-//     let ids;
-
-//     connection.query(`select * from nav`, (e, r, f) => {
-//         if (e) throw e;
-//         // 获取 id 及以下的所有pid数据的id
-//         ids = nav.get_insertAll_id(r, req.query.id);
-//         connection.query(`delete from nav where id in(${ids})`, (e, r, f) => {
-//             if (e) throw e;
-//             console.log('delete succeed');
-//             res.send(r);
-//         });
-//     });
-// });
-
 // 读取 id 对应的相应数据
 router.post('/admin/nav/navGetDataById', (req, res, next) => {
     connection.query(
@@ -183,8 +165,7 @@ router.use(['/admin/nav/navUpdate'], (req, res, next) => {
     let sql = ` select * from nav where id<>(${req.body.id}) and
                 navName = '${req.body.navName}' and 
                 pid = ${req.body.pid}`;
-    // console.log(sql);
-    // console.log(req.body);
+
     connection.query(sql, (e, r, f) => {
         if (e) throw e;
         if (r.length > 0) {
