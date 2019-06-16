@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="/css/nav.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <h3>导航管理页面</h3>
+        <button onclick="history.back()">返回</button>
+        <a href="/admin/nav/navEdit?edit=add" class="addNav">新增导航</a>
+        <a href="/admin/nav/navEdit?edit=update" class="updateNav">更新导航</a>
+        <div class="box">
+            <ul class="nav">
+                <li>id</li>
+                <li>navName</li>
+                <li>navTitle</li>
+                <li>navKeywords</li>
+                <li>navDescription</li>
+                <li>navStatus</li>
+                <li>navSort</li>
+                <li>pid</li>
+                <li>操作</li>
+            </ul>
+        </div>
+    </body>
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/alert/alert.js"></script>
+    <script>
+        let box = $('.box'),
+            navLi = $('.box .nav li');
+
+        $.ajax({
+            url: '/admin/nav/navList',
+            success: function(data) {
+                console.log(data);
+                $.each(data, (k, v) => {
+                    let col1 = $('<li>').text(v.id),
+                        col2 = $('<li>').text(v.limit + v.navName),
+                        col3 = $('<li>').text(v.navTitle),
+                        col4 = $('<li>').text(v.navKeywords),
+                        col5 = $('<li>').text(v.navDescription),
+                        col6 = $('<li>').text(v.navStatus == 0 ? '隐藏' : '显示'),
+                        col7 = $('<li>').text(v.navSort),
+                        col8 = $('<li>').text(v.pid),
+                        col9 = $(
+                            `<li>
+                                <a href="/admin/nav/navEdit?edit=update&id=${v.id}">编辑</a>
+                                <button class="delBtn" id="${v.id}">删除</button>
+                            </li>`
+                        );
+                    // 删除导航事件
+                    col9.children('button').click(function() {
+                        $.ajax({
+                            url: '/admin/nav/navDel',
+                            data: { id: this.id },
+                            success: function(data) {
+                                if (data.affectedRows) {
+                                    alert(`删除了${data.affectedRows}项数据`);
+                                    location.href = '/admin/nav/';
+                                } else {
+                                    alert('删除失败');
+                                }
+                            }
+                        });
+                    });
+
+                    let row = $('<ul>').append(
+                        col1,
+                        col2,
+                        col3,
+                        col4,
+                        col5,
+                        col6,
+                        col7,
+                        col8,
+                        col9
+                    );
+
+                    row.children().each(function(k, v) {
+                        $(v).css({
+                            width: `${navLi.eq(k).outerWidth()}px`,
+                            height: `${navLi.eq(k).outerHeight()}px`
+                        });
+                    });
+
+                    box.append(row);
+                });
+            }
+        });
+    </script>
+</html>

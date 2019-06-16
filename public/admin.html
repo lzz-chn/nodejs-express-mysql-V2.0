@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="/fontawesome-free-5.8.1/css/all.min.css" />
+        <link rel="stylesheet" href="/animate/animate.css" />
+        <link rel="stylesheet" href="/css/layuiAdmin.css" />
+        <title>admin</title>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="logo">
+                <a href="javascript:;">
+                    <span>layuiAdmin Pro</span>
+                    <img src="img/logo.png" alt="logo" />
+                </a>
+            </div>
+            <ul class="list">
+                <li>
+                    <a href="javascript:;">
+                        <i class="fas fa-home"></i>
+                        <span>主页</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <a href="javascript:;">
+                            <!-- <i class="fas fa-home"></i> -->
+                            <span>控制台</span>
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <dl>
+                            <dd>
+                                <a href="https://www.baidu.com" target="adminView">百度</a>
+                            </dd>
+                            <dd>主页一</dd>
+                            <dd>主页二</dd>
+                        </dl>
+
+                        <dd>主页一</dd>
+                        <dd>主页二</dd>
+                    </dl>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="fas fa-dice-d6"></i>
+                        <span>组件</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <dd>控制台</dd>
+                        <dd>
+                            <a href="a.html" target="adminView">a</a>
+                        </dd>
+                        <dd>
+                            <a href="b.html" target="adminView">b</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="far fa-file-alt"></i>
+                        <span>页面</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <dd>控制台</dd>
+                        <dd>主页一</dd>
+                        <dd>主页二</dd>
+                    </dl>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="far fa-file-alt"></i>
+                        <span>导航管理</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <dd><a href="/admin/nav" target="adminView" >导航管理页面</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="far fa-file-alt"></i>
+                        <span>内容管理</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <dd><a href="/admin/article" target="adminView" >文章管理</a></dd>
+                    </dl>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <i class="far fa-file-alt"></i>
+                        <span>网站设置</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
+                    <dl>
+                        <dd><a href="/admin/website" target="adminView" >基本设置</a></dd>
+                    </dl>
+                </li>
+                <div class="line"></div>
+            </ul>
+        </div>
+        <div class="main">
+            <div class="header">
+                <div class="left">
+                    <i class="fas fa-outdent" title="收起侧边栏"></i>
+                    <i class="fas fa-redo" title="刷新"></i>
+                </div>
+                <div class="right">
+                    <span>用户<i class="fas fa-caret-down"></i></span>
+                    <i class="fas fa-palette" title="主题"></i>
+                    <i class="fas fa-expand-arrows-alt" title="全屏"></i>
+                    <i class="fas fa-info-circle" title="关于"></i>
+                </div>
+            </div>
+            <div class="admin">
+                <iframe src="" frameborder="0" name="adminView"></iframe>
+                <div class="userBox">
+                    <P>基本资料</P>
+                    <P>修改密码</P>
+                    <div>退出</div>
+                </div>
+                <div class="theme">
+                    <div>
+                        <div></div>
+                        <p></p>
+                        <span></span>
+                    </div>
+                    <div>
+                        <div></div>
+                        <p></p>
+                        <span></span>
+                    </div>
+                    <div>
+                        <div></div>
+                        <p></p>
+                        <span></span>
+                    </div>
+                    <div>
+                        <div></div>
+                        <p></p>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="about">
+                    <p>版本信息</p>
+                    <div>
+                        <p>当前版本：layuiAdmin-v1.2.1 pro</p>
+                        <p>基于框架：layui-v2.4.5</p>
+                        <button>获取授权</button>
+                        <button>下载新版</button>
+                    </div>
+                    <p>关于版权</p>
+                    <div class="copyright">
+                        layuiAdmin
+                        受国家计算机软件著作权保护（登记号：2018SR410669），必须经官网授权才可获得源文件使用权。不得恶意分享产品源代码、二次转售等，违者将承担相应的法律责任。
+                        <p>详见：《layui 付费产品服务条款》</p>
+                    </div>
+                    <div>© 2018<a href=""> layui.com </a>版权所有</div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/js/layuiAdmin.js"></script>
+</html>

@@ -1,0 +1,63 @@
+// out: mixin.css, compress: true, sourceMap: false
+// 文件保存到同一文件夹下的 mixin.css 文件，压缩，不生成map 
+
+// css 初始化
+.allCssInit() {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    outline: none;
+}
+
+// a 标签样式初始化
+.aCssInit() {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+}
+
+// 标签全屏
+.fullScreen() {
+    width: 100%;
+    height: 100%;
+}
+
+// 清除浮动
+.floatClear() {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+// 使用定位居中
+.positionCenter() {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// border三角形
+.triangle(@_, @w: 10px, @c: #fff) {
+    width: 0;
+    height: 0;
+    border: @w solid transparent;
+}
+
+.triangle(T, @w: 10px, @c: #fff) {
+    border-bottom-color: @c;
+}
+
+.triangle(B, @w: 10px, @c: #fff) {
+    border-top-color: @c;
+}
+
+.triangle(L, @w: 10px, @c: #fff) {
+    border-right-color: @c;
+}
+
+.triangle(R, @w: 10px, @c: #fff) {
+    border-left-color: @c;
+}

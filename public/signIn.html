@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>signIn</title>
+        <link rel="stylesheet" href="/alert/alert.css" />
+        <link rel="stylesheet" href="css/signIn.css" />
+    </head>
+    <body>
+
+        <form action="" class="signIn">
+            <img src="img/user.png" alt="">
+            <label for="">
+                <span>管理员名 : </span>
+                <input type="text" name="name" />
+            </label>
+
+            <label for="">
+                <span>密码 : </span>
+                <input type="password" name="pwd" />
+            </label>
+            <label for="">
+                <span>验证码 : </span>
+                <input type="text" name="captcha" />
+                <img src="/captcha" alt="" class="captcha" />
+            </label>
+            <button type="submit" class="btn">登陆</button>
+        </form>
+        
+    </body>
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/alert/alert.js"></script>
+    <script src="js/signIn.js"></script>
+</html>

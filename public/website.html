@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+    <body>
+        <button onclick="history.back()">返回</button>
+        <h3>网站设置</h3>
+        <table border="1">
+            <tr>
+                <td>网站标题</td>
+                <td><input type="text" class="title" /></td>
+            </tr>
+            <tr>
+                <td>关键字</td>
+                <td><input type="text" class="keywords" /></td>
+            </tr>
+            <tr>
+                <td>描述</td>
+                <td>
+                    <textarea
+                        name="description"
+                        class="description"
+                        cols="40"
+                        rows="4"
+                    ></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>Logo PC</td>
+                <td>
+                    <input type="file" class="logo_pc" style="display: none" />
+                    <img
+                        src="/img/pictures_update.png"
+                        height="50"
+                        class="logoPc"
+                    />
+                    <span>大小不超过400KByte</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Mobile PC</td>
+                <td>
+                    <input
+                        type="file"
+                        class="logo_mobile"
+                        style="display: none"
+                    />
+                    <img
+                        src="/img/pictures_update.png"
+                        height="50"
+                        class="logoMobile"
+                    />
+                    <span>大小不超过200KByte</span>
+                </td>
+            </tr>
+            <tr>
+                <td>邮箱</td>
+                <td><input type="text" class="email" /></td>
+            </tr>
+            <tr>
+                <td>电话</td>
+                <td><input type="number" class="phone" /></td>
+            </tr>
+            <tr>
+                <td>地址</td>
+                <td><input type="text" class="address" /></td>
+            </tr>
+            <tr>
+                <td>QQ</td>
+                <td><input type="number" class="qq" /></td>
+            </tr>
+            <tr>
+                <td>WeChat</td>
+                <td><input type="text" class="wechat" /></td>
+            </tr>
+            <tr>
+                <td>icps</td>
+                <td><input type="text" class="icps" /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="button" class="sub">提交</button>
+                </td>
+            </tr>
+        </table>
+
+        <img src="/qr?txt=666" alt="" />
+    </body>
+    <script src="/jquery/jquery-3.4.1.js"></script>
+    <script>
+        let id,
+            imgOld = { logo_pc: '', logo_mobile: '' }; 
+
+        // 将路径中的 \ 转换为 \\ 防止被系统转义
+        const repBackslash = str => str.replace(/\\/g, '\\\\');
+        // 显示已有数据
+        (() => {
+            $.ajax({
+                url: '/admin/website/websiteGet',
+                async: false,
+                success: function(data) {
+                    if (typeof data == 'string') {
+                        id = data;
+                        // console.log('insertId : ' + id);
+                    } else {
+                        id = data.id;
+                        // console.log('data : ' + id);
+                        imgOld.logo_pc = data.logo_pc
+                            ? repBackslash(data.logo_pc)
+                            : null;
+                        imgOld.logo_mobile = data.logo_mobile
+                            ? repBackslash(data.logo_mobile)
+                            : null;
+                        $('.title').val(data.title);
+                        $('.keywords').val(data.keywords);
+                        $('.description').val(data.description);
+                        $('.logoPc').attr({
+                            src: `/${
+                                data.logo_pc
+                                    ? data.logo_pc.replace('public\\', '')
+                                    : 'img/pictures_update.png'
+                            }`
+                        });
+                        $('.logoMobile').attr({
+                            src: `/${
+                                data.logo_mobile
+                                    ? data.logo_mobile.replace('public\\', '')
+                                    : 'img/pictures_update.png'
+                            }`
+                        });
+                        $('.email').val(data.email);
+                        $('.phone').val(data.phone);
+                        $('.address').val(data.address);
+                        $('.qq').val(data.qq);
+                        $('.wechat').val(data.wechat);
+                        $('.icps').val(data.icps);
+                    }
+                }
+            });
+        })();
+        const imgUpload = (inp, img, fileSize) => {
+            img.click(function() {
+                inp.click();
+            });
+            inp.change(function() {
+                if (this.files[0].name.match(/\.(png|jpg|jpeg|gif|bmp)$/)) {
+                    // logo文件大小超过 fileSizeKB 不允许上传
+                    if (this.files[0].size / 1024 <= fileSize) {
+                        let imgFile = new FormData();
+                        imgFile.append('img', this.files[0]);
+
+                        $.ajax({
+                            url: '/admin/imgUpdate',
+                            method: 'post',
+                            data: imgFile,
+                            processData: false,
+                            contentType: false,
+                            success: function(data) {
+                                if (data) {
+                                    img.attr({ src: `/${data}` });
+                                    alert('上传图片成功');
+                                } else {
+                                    alert('上传图片失败');
+                                }
+                            }
+                        });
+                    } else {
+                        alert(`上传图片大小不允许超过${fileSize}KByte`);
+                    }
+                } else {
+                    alert('上传格式错误');
+                }
+            });
+        };
+        imgUpload($('.logo_pc'), $('.logoPc'), 400);
+        imgUpload($('.logo_mobile'), $('.logoMobile'), 200);
+        
+        $('.sub').click(function() {
+            let f = new FormData();
+            f.append('id', id);
+            f.append('title', $('.title').val());
+            f.append('keywords', $('.keywords').val());
+            f.append('description', $('.description').val());
+            f.append('email', $('.email').val());
+            f.append('phone', $('.phone').val());
+            f.append('address', $('.address').val());
+            f.append('qq', $('.qq').val());
+            f.append('wechat', $('.wechat').val());
+            f.append('icps', $('.icps').val());
+            f.append('logo_pc', $('.logo_pc')[0].files[0]);
+            f.append('logo_mobile', $('.logo_mobile')[0].files[0]);
+            f.append('old_logo_pc', imgOld.logo_pc);
+            f.append('old_logo_mobile', imgOld.logo_mobile);
+
+            $.ajax({
+                url: '/admin/website/websiteUpdate',
+                method: 'post',
+                processData: false,
+                contentType: false,
+                data: f,
+                success: function(data) {
+                    if (data == 'websiteUpdate succeed') {
+                        alert('更新成功');
+                        location.href = '/admin/website';
+                    }
+                }
+            });
+        });
+    </script>
+</html>
