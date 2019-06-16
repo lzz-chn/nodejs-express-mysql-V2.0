@@ -27,7 +27,12 @@
                 </div>
                 <div>
                     <div>栏目关键字</div>
-                    <textarea name="navKeywords" class="navKeywords" cols="40" rows="5"></textarea>
+                    <textarea
+                        name="navKeywords"
+                        class="navKeywords"
+                        cols="40"
+                        rows="5"
+                    ></textarea>
                 </div>
                 <div>
                     <div>栏目描述</div>
@@ -41,9 +46,20 @@
                 <div>
                     <div>栏目状态</div>
                     <span>显示</span>
-                    <input type="radio" value="1" name="navStatus" class="navStatus" checked />
+                    <input
+                        type="radio"
+                        value="1"
+                        name="navStatus"
+                        class="navStatus"
+                        checked
+                    />
                     <span>隐藏</span>
-                    <input type="radio" value="0" name="navStatus" class="navStatus" />
+                    <input
+                        type="radio"
+                        value="0"
+                        name="navStatus"
+                        class="navStatus"
+                    />
                 </div>
                 <div>
                     <div>栏目排序</div>
@@ -54,25 +70,16 @@
         </div>
     </body>
     <script src="/jquery/jquery-3.4.1.js"></script>
+    <script src="/js/public.js"></script>
     <script>
         let title = $('.box .title'),
             sub = $('.sub'),
             form = $('.navEdit'),
             pid = $('.pid');
 
-        const getSelectV = () => {
-            $.ajax({
-                url: '/admin/nav/navSelect',
-                async: false,
-                success: function(data) {
-                    pid.html(`<option value="0">顶级导航</option>${data}`);
-                }
-            });
-        };
-        getSelectV();
+        getSelectData(pid, '顶级导航');
 
         // 使用正则取 edit 的数据
-        // let editStatus = location.search.match(/edit=?([^&]+)/);
         let editStatus = location.search.match(/\w+=\w+/g);
         if (editStatus) {
             if (editStatus[0] == 'edit=add') {
@@ -85,14 +92,14 @@
                         success: function(data) {
                             switch (data) {
                                 case 'insert succeed':
-                                    alert('栏目添加成功');
+                                    alert('导航添加成功');
                                     location.href = '/admin/nav/';
                                     break;
                                 case 'navName repeat':
-                                    alert('栏目名称已存在');
+                                    alert('导航名称已存在');
                                     break;
                                 default:
-                                    alert('栏目添加出错');
+                                    alert('导航添加出错');
                                     break;
                             }
                         }
@@ -139,18 +146,20 @@
                     $.ajax({
                         url: '/admin/nav/navUpdate',
                         method: 'post',
-                        data: form.serialize().concat('&', editStatus[1], '&pid=', pid),
+                        data: form
+                            .serialize()
+                            .concat('&', editStatus[1], '&pid=', pid),
                         success: function(data) {
                             switch (data) {
                                 case 'set succeed':
-                                    alert('栏目编辑成功');
+                                    alert('导航编辑成功');
                                     location.href = '/admin/nav';
                                     break;
                                 case 'navName repeat':
-                                    alert('栏目名称重复');
+                                    alert('导航名称重复');
                                     break;
                                 default:
-                                    alert('栏目编辑出错');
+                                    alert('导航编辑出错');
                                     break;
                             }
                         }
