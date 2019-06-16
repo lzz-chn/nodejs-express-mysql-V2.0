@@ -7,47 +7,40 @@ let searchBtn = $('.search button'),
     searchType = { select: 'all', value: '', page: 1 }, // 默认搜索类型为 all 空 1
     delBtn = $('.delBtn');
 
-(() => {
-    $.ajax({
-        url: '/admin/nav/navSelect',
-        async: false,
-        success: function(data) {
-            pid.html(`<option value="-1">未分类</option>${data}`);
-        }
-    });
-})();
+getSelectData(pid, -1, '未分类');
 
 const appendTag = (data, tag) => {
     for (let i in data) {
         $.each($(data[i]), (k, v) => {
             tag.append(
                 `<tr>
-                            <td>${v.id}</td>
-                            <td class="title">${v.title}</td>
-                            <td>${v.author}</td>
-                            <td>${v.navStatus == '0' ? '草稿' : '发布'}</td>
-                            <td>
-                                ${['普通文章', '缩略图文章', '广告位文章'][v.classType]}
-                            </td>
-                            <td>
-                                ${v.img != 'null' ? '<img src=/' + v.img + '>' : '无'}
-                            </td>
-                            <td>${v.readNum}</td>
-                            <td>${new Date(v.time).toLocaleDateString()}</td>
-                            <td>
-                                <a href="/admin/article/articleEdit?edit=update&id=${v.id}">
-                                    编辑
-                                </a>
-                                <button class="delBtn" id="${v.id}" img_path="${v.img_path}">
-                                    删除
-                                </button>
-                            </td>
-                        </tr>`
+                <td>${v.id}</td>
+                <td class="title">${v.title}</td>
+                <td>${v.author}</td>
+                <td>${v.navStatus == '0' ? '草稿' : '发布'}</td>
+                <td>
+                    ${['普通文章', '缩略图文章', '广告位文章'][v.classType]}
+                </td>
+                <td>
+                    ${v.img != 'null' ? '<img src=/' + v.img + '>' : '无'}
+                </td>
+                <td>${v.readNum}</td>
+                <td>${new Date(v.time).toLocaleDateString()}</td>
+                <td>
+                    <a href="/admin/article/articleEdit?edit=update&id=${v.id}">
+                        编辑
+                    </a>
+                    <button class="delBtn" id="${v.id}" img_path="${v.img_path}">
+                        删除
+                    </button>
+                </td>
+            </tr>`
             )
                 .find('button:last')
                 .click(function() {
                     $.ajax({
                         url: '/admin/article/articleDel',
+                        method: 'post',
                         data: {
                             id: $(this).attr('id'),
                             img_path: $(this).attr('img_path')

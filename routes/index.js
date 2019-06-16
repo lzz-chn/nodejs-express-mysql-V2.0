@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-var svgCaptcha = require('svg-captcha');
-var navcm = require('navcm');
-var nav = navcm();
-var mysql = require('mysql');
-var upFile = require('filese');
+var svgCaptcha = require('svg-captcha'); // 验证码模块
+var navcm = require('navcm'); // 导航数据分类，输出模块
+var nav = navcm(); 
+var upFile = require('filese'); // 文件管理模块
 var upload = upFile('public/uploads/'); //上传文件的 文件目录
-
+var mpages = require('mpages'); // 数据分页模块
+var mysql = require('mysql');  // MySQL 数据库模块
 var connection = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
@@ -49,18 +49,22 @@ router.get('/captcha', function(req, res) {
 //     next();
 // });
 
+// 管理员界面
 router.get('/admin', (req, res, next) => {
     res.sendFile(setPath(req, '/admin.html'));
 });
 
+// 管理员登录页面
 router.get('/signIn', (req, res, next) => {
     res.sendFile(setPath(req, 'signIn.html'));
 });
 
+// 导航管理界面
 router.get('/admin/nav', (req, res, next) => {
     res.sendFile(setPath(req, 'nav.html'));
 });
 
+// 编辑导航界面
 router.get('/admin/nav/navEdit', (req, res, next) => {
     res.sendFile(setPath(req, 'navEdit.html'));
 });
@@ -102,7 +106,7 @@ router.post('/admin/nav/navAdd', (req, res, next) => {
     });
 });
 
-// 获取所属栏目数据
+// 获取所有导航所属栏目数据
 router.get('/admin/nav/navSelect', (req, res, next) => {
     connection.query('select * from nav', (error, results, fields) => {
         if (error) throw error;
@@ -148,10 +152,10 @@ router.get('/admin/nav/navDel', (req, res, next) => {
     });
 });
 
-// 读取 id 对应的相应数据
-router.post('/admin/nav/navGetDataById', (req, res, next) => {
+// 读取id对应导航的相应数据
+router.get('/admin/nav/navGetDataById', (req, res, next) => {
     connection.query(
-        `select * from nav where id = ${req.body.id}`,
+        `select * from nav where id = ${req.query.id}`,
         (error, results, fields) => {
             if (error) throw error;
             console.log(results[0]);
@@ -160,7 +164,7 @@ router.post('/admin/nav/navGetDataById', (req, res, next) => {
     );
 });
 
-// 编辑导航名称去重中间件
+// 更新导航名称去重中间件
 router.use(['/admin/nav/navUpdate'], (req, res, next) => {
     let sql = ` select * from nav where id<>(${req.body.id}) and
                 navName = '${req.body.navName}' and 
@@ -177,7 +181,7 @@ router.use(['/admin/nav/navUpdate'], (req, res, next) => {
     });
 });
 
-// 编辑导航
+// 更新导航
 router.post('/admin/nav/navUpdate', (req, res, next) => {
     console.log(req.body);
     let sql = ` update nav set 
@@ -196,22 +200,20 @@ router.post('/admin/nav/navUpdate', (req, res, next) => {
     });
 });
 
-// 文章管理
+// 文章管理界面
 router.get('/admin/article', (req, res, next) => {
     res.sendFile(setPath(req, 'article.html'));
 });
 
-// 文章管理页面
+// 文章编辑页面
 router.get('/admin/article/articleEdit', (req, res, next) => {
     res.sendFile(setPath(req, 'articleEdit.html'));
 });
 
 // 上传图片文件
 router.post('/admin/imgUpdate', upload.single('img'), (req, res, next) => {
-    // console.log(req.file);
     if (req.file) {
         res.send(req.file.rdestination);
-        // res.send(repBackslash(req.file.path));
     } else {
         res.end();
     }
@@ -264,8 +266,6 @@ router.post(
         });
     }
 );
-
-var mpages = require('mpages');
 
 // 文章列表路由
 // 可通过搜索文章标题来查询，可以用栏目分类查询，可以用文章类型
@@ -336,20 +336,20 @@ router.get('/admin/article/articleGet', (req, res, next) => {
 });
 
 // 删除文章
-router.get('/admin/article/articleDel', (req, res, next) => {
-    console.log(req.query.img_path);
+router.post('/admin/article/articleDel', (req, res, next) => {
     connection.query(
-        `delete from article where id = ${req.query.id}`,
+        `delete from article where id = ${req.body.id}`,
         (error, results, fields) => {
             if (error) throw error;
             if (results) {
-                if (req.query.img_path) {
-                    upload.deleteFile(imgPath(req, req.query.img_path));
+                if (req.body.img_path) {
+                    upload.deleteFile(imgPath(req, req.body.img_path));
                 }
                 console.log('articleDel succeed');
                 res.send('articleDel succeed');
             } else {
-                res.send();
+                console.log('articleDel error');
+                res.send('articleDel error');
             }
         }
     );
@@ -434,7 +434,7 @@ router.post(
     }
 );
 
-// 网站设置页面
+// 网站基本信息设置页面
 router.get('/admin/website', (req, res, next) => {
     res.sendFile(setPath(req, 'website.html'));
 });
@@ -497,8 +497,8 @@ router.post(
                 imgPath(req, repBackslash(req.body.old_logo_mobile))
             );
         }
-        console.log(sql);
-        console.log(req.body);
+        // console.log(sql);
+        // console.log(req.body);
         connection.query(sql, (error, results, fields) => {
             if (error) throw error;
             if (results) {
