@@ -102,7 +102,6 @@ router.post('/admin/nav/navAdd', (req, res, next) => {
     });
 });
 
-
 router.get('/admin/nav/navSelect', (req, res, next) => {
     connection.query('select * from nav', (error, results, fields) => {
         if (error) throw error;
@@ -144,7 +143,7 @@ router.get('/admin/nav/navDel', (req, res, next) => {
                         );
                     }
                     console.log('delete succeed');
-                    res.send(r);
+                    res.send('delete succeed');
                 }
             );
         });
