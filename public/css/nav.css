@@ -14,26 +14,11 @@ a {
 .box {
   margin: 10px;
 }
-.box .nav li {
+.box .nav td {
   text-align: center;
   background-color: #bbbbbb;
 }
-.box ul {
-  font-size: 16px;
-}
-.box ul li {
-  float: left;
-  border: 1px solid black;
-  padding: 5px 10px;
-  min-width: 80px;
-}
-.box ul li:nth-of-type(2) {
-  width: 150px;
-}
-.box ul li:nth-of-type(9) {
-  width: 92px;
-}
-.box ul li a {
+.box tr td a {
   position: relative;
   top: -1px;
   float: left;
@@ -47,7 +32,7 @@ a {
   background-color: #07ff07;
   border-radius: 5px 0 0 5px;
 }
-.box ul li button {
+.box tr td button {
   position: relative;
   top: -1px;
   float: left;
@@ -60,12 +45,4 @@ a {
   cursor: pointer;
   background-color: #ff5858;
   border-radius: 0 5px 5px 0;
-}
-.box ul:last-child {
-  display: flex;
-}
-.box ul::after {
-  content: '';
-  display: block;
-  clear: both;
 }

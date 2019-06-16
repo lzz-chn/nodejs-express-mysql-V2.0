@@ -10,30 +10,16 @@ a {
 
 .box {
     margin: 10px;
+
     .nav {
-        li {
+        td {
             text-align: center;
             background-color: rgb(187, 187, 187);
         }
     }
 
-    ul {
-        font-size: 16px;
-
-        li {
-            float: left;
-            border: 1px solid black;
-            padding: 5px 10px;
-            min-width: 80px;
-
-            &:nth-of-type(2) {
-                width: 150px;
-            }
-
-            &:nth-of-type(9) {
-                width: 92px;
-            }
-
+    tr {
+        td {
             .aButton() {
                 position: relative;
                 top: -1px;
@@ -58,14 +44,6 @@ a {
                 background-color: rgb(255, 88, 88);
                 border-radius: 0 5px 5px 0;
             }
-        }
-
-        &:last-child {
-            display: flex;
-        }
-
-        &::after {
-            .floatClear();
         }
     }
 }
