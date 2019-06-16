@@ -2,7 +2,7 @@ let box = $('.box'),
     navLi = $('.box .nav li');
 
 $.ajax({
-    url: '/admin/nav/navList',
+    url: '/admin/nav/navSelect?type=json',
     success: function(data) {
         console.log(data);
         $.each(data, (k, v) => {
