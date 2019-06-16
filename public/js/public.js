@@ -5,7 +5,7 @@
  */
 const getSelectData = (select, text) => {
     $.ajax({
-        url: '/admin/nav/navSelect',
+        url: '/admin/nav/navSelect?type=option',
         async: false,
         success: function(data) {
             select.html(`<option value="0">${text}</option>${data}`);
