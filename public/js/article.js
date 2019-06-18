@@ -30,7 +30,9 @@ const appendTag = (data, tag) => {
                     <a href="/admin/article/articleEdit?edit=update&id=${v.id}">
                         编辑
                     </a>
-                    <button class="delBtn" id="${v.id}" img_path="${v.img_path}">
+                    <button class="delBtn" id="${v.id}" img_path="${
+                    v.img_path
+                }">
                         删除
                     </button>
                 </td>
@@ -65,8 +67,9 @@ const select = datas => {
         url: `/admin/article/articleGet`,
         data: datas,
         success: function(data) {
-            console.log(data);
+            // console.log(data);
             boxTbody.html(''); // 清空列表
+            console.log(data.sqlData);
             if (data.sqlData) {
                 appendTag(data.sqlData, boxTbody);
                 boxBtn.html(''); // 清空按钮
@@ -79,7 +82,10 @@ const select = datas => {
                                 select(searchType);
                             })
                             .css({
-                                backgroundColor: pages[i] == data.pagings.page ? 'red' : 'green'
+                                backgroundColor:
+                                    pages[i] == data.pagings.page
+                                        ? 'red'
+                                        : 'green'
                             })
                     );
                 }
@@ -98,7 +104,7 @@ searchBtn.click(function() {
 });
 
 pid.change(function() {
-    searchType.select = 'pid';
+    searchType.select = $(this).val() == -1 ? 'all' : 'pid';
     searchType.value = $(this).val();
     select(searchType);
 });
