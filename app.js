@@ -8,6 +8,7 @@ var ueditor = require('ueditor');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var wxmpRouter = require('./routes/wxmp');
 
 var app = express();
 
@@ -82,6 +83,7 @@ app.use(express.static(path.join(__dirname, 'tools')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/wxmp', wxmpRouter);
 
 app.set('position', __dirname); // 共同变量
 

@@ -3,11 +3,13 @@ var router = express.Router();
 var path = require('path');
 var svgCaptcha = require('svg-captcha'); // 验证码模块
 var navcm = require('navcm'); // 导航数据分类，输出模块
-var nav = navcm(); 
+var nav = navcm();
 var upFile = require('filese'); // 文件管理模块
 var upload = upFile('public/uploads/'); //上传文件的 文件目录
 var mpages = require('mpages'); // 数据分页模块
-var mysql = require('mysql');  // MySQL 数据库模块
+var request = require('request'); // 爬虫模块
+var corsz = require('corsz'); // 跨域模块
+var mysql = require('mysql'); // MySQL 数据库模块
 var connection = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
@@ -15,6 +17,8 @@ var connection = mysql.createConnection({
     database: 'mysql_1'
 });
 connection.connect();
+
+corsz(router);
 
 // 拼接绝对地址
 const setPath = (req, paths) =>
@@ -25,6 +29,30 @@ const repBackslash = str => str.replace(/\\/g, '\\\\');
 
 // 图片地址拼接
 const imgPath = (req, img) => path.join(req.app.get('position'), img);
+
+//自己定一个访问数据的路由
+router.get('/kugou', function(req, res) {
+    //request("写请求地址",回调函数(错误，响应，数据))
+    console.log('酷狗接口：' + req.query.urls);
+    var options = {
+        url: req.query.urls,
+        headers: {
+            //通过设置 User-agent来把当前的请求模拟成手机客户端请求
+            'User-Agent':
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
+        }
+    };
+    request(options, function(error, response, body) {
+        //console.log(body); //body就是接受的数据
+        res.send(JSON.parse(body)); //通过JSON.parse(body) 把字符串格式的json转成对象形式的json
+    });
+});
+//首页接口：http://localhost:3000/ma?urls=http://m.kugou.com/?json=true
+//排行接口：http://localhost:3000/ma?urls=http://m.kugou.com/rank/list&json=true
+//--排行榜内页接口：http://m.kugou.com/rank/info?rankid=6666&curPage=1&totalPage=2&json=true
+//歌单接口：ttp://localhost:3000/ma?urls=http://m.kugou.com/plist/index&json=true
+//歌手接口：http://localhost:3000/ma?urls=http://m.kugou.com/singer/class&json=true
+//歌曲接口：http://localhost:3000/ma?urls=http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash=8706F1C8339154DAB1F07E5ECE22DEB8
 
 // 公共路由 验证码
 router.get('/captcha', function(req, res) {
